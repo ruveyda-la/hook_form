@@ -1,66 +1,72 @@
 import React, { useState } from 'react';
 
-const UserForm = (props) => {
-    const [userFirstName, setUserFirstName] = useState("");
-    const [userLastName, setUserLastName] = useState("");
-    const [userEmail, setUserEmail] = useState("");
-    const [userPassword, setUserPassword] = useState("");
-    const [userConfirmPassword, setUserConfirmPassword] = useState("");
-    const [hasBeenSubmitted, setHasBeenSubmitted] = useState(false);
+const UserForm = () => {
+    const [user,setUser] = useState({
+        firstName:"",
+        lastName:"",
+        email:"",
+        password:"",
+        confirmPassword:"",
+        hasBeenSubmitted:false
+})
 
-    const createUser = (e) => {
-        e.preventDefault();
-        const newUser = {userFirstName,userLastName,userEmail,userPassword,userConfirmPassword};
-        console.log(newUser)
-        setUserFirstName("");
-        setUserLastName("");
-        setUserEmail("");
-        setUserPassword("");
-        setUserConfirmPassword("");
-        setHasBeenSubmitted( true );
+    const [allUsers,setAllUsers] = useState([]);
+
+    const changeHandler = (e) => {
+        setUser ({
+            ...user,
+            [e.target.name]:e.target.value
+        })    
     };
+    const submitHandler = (e) => {
+        e.preventDefault();
+        user.hasBeenSubmitted=true
+        setAllUsers([...allUsers, user]);
+
+    }
   return (
     <div>
         <div>
 
         <h3>Registration Form</h3>
-        <form onSubmit={ createUser }>
-            {hasBeenSubmitted?
+        <form onSubmit={ submitHandler }>
+            {user.hasBeenSubmitted?
             <h4>Thank you for submitting the form!</h4> :
             <h4>Welcome,please submit the form.</h4>
             }
             <div>
                 <label>First Name:</label> 
-                <input type="text" value={userFirstName} onChange={ (e) => setUserFirstName(e.target.value) } />
-                {userFirstName.length>0 && userFirstName.length<2 ?(
+                <input type="text" name="firstName" value={user.firstName} onChange={changeHandler} />
+                {user.firstName.length>0 && user.firstName.length<2 ?(
                     <p>First name must be at least 2 characters.</p>
                 ): null}
             </div>
             <div>
+                <p></p><br/>
                 <label>Last Name:</label> 
-                <input type="text" value={userLastName} onChange={ (e) => setUserLastName(e.target.value) } />
-                {userLastName.length>0 && userLastName.length<2 ?(
-                    <p>Last name must be at least 2 characters.</p>
+                <input type="text" name="lastName" value={user.lastName} onChange={changeHandler} />
+                {user.lastName.length>0 && user.lastName.length<2 ?(  
+                    <p>Last name must be at least 2 characters.</p>   
                 ): null}
             </div>
             <div>
                 <label>Email:</label> 
-                <input type="text" value={userEmail} onChange={ (e) => setUserEmail(e.target.value) } />
-                {userEmail.length>0 && userEmail.length<10 ?(
+                <input type="text" name="email" value={user.email} onChange={changeHandler} />
+                {user.email.length>0 && user.email.length<10 ?(
                     <p>Email must be at least 10 characters.</p>
                 ): null}
             </div>
             <div>
                 <label>Password:</label> 
-                <input type="password" value={userPassword} onChange={ (e) => setUserPassword(e.target.value) } />
-                {userPassword.length>0 && userPassword.length<8 ?(
+                <input type="password" name="password" value={user.password} onChange={changeHandler} />
+                {user.password.length>0 && user.password.length<8 ?(
                     <p>Password must be at least 8 characters.</p>
                 ): null}
             </div>
             <div>
                 <label>Confirm Password:</label> 
-                <input type="password" value={userConfirmPassword} onChange={ (e) => setUserConfirmPassword(e.target.value) } />
-                {userConfirmPassword !== userPassword ? (<p>Passwords does not match.</p>
+                <input type="password" name="confirmPassword" value={user.confirmPassword} onChange={changeHandler} />
+                {user.confirmPassword !== user.password ? (<p>Passwords does not match.</p>
                 ): null}
             </div>
             <input type="submit" value="Create User" />
@@ -68,11 +74,11 @@ const UserForm = (props) => {
         </div>
         <div>
             <h4>Your Form Data</h4>
-            <h5>First Name:{userFirstName}</h5>
-            <h5>Last Name:{userLastName}</h5>
-            <h5>Email:{userEmail}</h5>
-            <h5>Password: {userPassword}</h5>
-            <h5>Confirm Password:{userConfirmPassword}</h5>
+            <h5>First Name:{user.firstName}</h5>
+            <h5>Last Name:{user.lastName}</h5>
+            <h5>Email:{user.email}</h5>
+            <h5>Password: {user.password}</h5>
+            <h5>Confirm Password:{user.confirmPassword}</h5>
         </div>
     </div>
   );
